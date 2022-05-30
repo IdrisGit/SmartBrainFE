@@ -23,7 +23,7 @@ class Register extends React.Component {
     }
 
     onSubmitRegister = () => {
-        fetch('http://localhost:3000/register', 
+        fetch('https://ancient-atoll-84841.herokuapp.com/register', 
         {
             method : 'post',
             headers : {'Content-Type' : 'application/json'},
@@ -37,7 +37,7 @@ class Register extends React.Component {
         .then (user => {
             if(user.id){
                 this.props.loadUser(user);
-                this.props.onRouteChange('signin')
+                this.props.onRouteChange('home')
             }
         })
     }
@@ -49,7 +49,7 @@ class Register extends React.Component {
             <main className="pa4 black-80">
                 <div className="measure">
                     <fieldset id="sign_up" className="ba b--transparent ph0 mh0">
-                        <legend className="f2 fw6 ph0 mh0">Sign In</legend>
+                        <legend className="f2 fw6 ph0 mh0">Register</legend>
                         <div className="mt3">
                             <label className="db fw6 lh-copy f6" htmlFor="name">Name</label>
                             <input
