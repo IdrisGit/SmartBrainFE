@@ -61,10 +61,10 @@ class App extends Component {
     const imageHeight = Number(image.height);
     let boundingData = clarifaiFaceData.map((data) => {
       let bounding = data.region_info.bounding_box;
-      let boxes = [{leftCol: bounding.left_col * width,
-                      topRow: bounding.top_row * height,
-                      rightCol: width - (bounding.right_col * width),
-                      bottomRow: height - (bounding.bottom_row * height)
+      let boxes = [{leftCol: bounding.left_col * imageWidth,
+                      topRow: bounding.top_row * imageHeight,
+                      rightCol: imageWidth - (bounding.right_col * imageWidth),
+                      bottomRow: imageHeight - (bounding.bottom_row * imageHeight)
                     }]
       return boxes;
     });
