@@ -14,7 +14,7 @@ import Background from './Components/Background/Background';
 const initialState = {
   input : "",
   imageUrl : "",
-  box : {},
+  boundingData: [],
   route : "signin",
   isSignedIn : false,
   user : {
@@ -55,21 +55,24 @@ class App extends Component {
   }
 
   calculateFaceLocation = (data) => {
-    const clarifaiFaceData = data.outputs[0].data.regions[0].region_info.bounding_box;
+    const clarifaiFaceData = data.outputs[0].data.regions;
     const image = document.getElementById("inputimage");
     const imageWidth = Number(image.width);
     const imageHeight = Number(image.height);
-    return{
-      leftCol: clarifaiFaceData.left_col * imageWidth,
-      topRow: clarifaiFaceData.top_row * imageHeight,
-      rightCol: imageWidth - (clarifaiFaceData.right_col * imageWidth),
-      bottomRow: imageHeight - (clarifaiFaceData.bottom_row * imageHeight)
-    }
-
+    let boundingData = clarifaiFaceData.map((data) => {
+      let bounding = data.region_info.bounding_box;
+      let boxes = [{leftCol: bounding.left_col * width,
+                      topRow: bounding.top_row * height,
+                      rightCol: width - (bounding.right_col * width),
+                      bottomRow: height - (bounding.bottom_row * height)
+                    }]
+      return boxes;
+    });
+    return boundingData;
   }
 
-  displayFaceBox = (box) =>{
-    this.setState({box: box});
+  displayFaceBox = (boundingData) => {
+    this.setState({boundingData: boundingData});
   }
 
   onInputChange = (event) => {
@@ -107,7 +110,7 @@ class App extends Component {
   }
 
   render(){
-    const {isSignedIn, imageUrl, box, route} = this.state;
+    const {isSignedIn, imageUrl, boundingData, route} = this.state;
     return (
       <div className="App">
           <Background />
@@ -124,7 +127,7 @@ class App extends Component {
             />
             <FaceDetection 
             imageUrl = {imageUrl}
-            box = {box}
+            boundingData = {boundingData}
             />
           </div>
         : (
